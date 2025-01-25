@@ -243,7 +243,7 @@ def optimization_global(b0_init, b0, score, rho, lamd, alpha, time_limit, count)
     t1 = time.time()
     time_used = t1 - t0 
     print(time_used)
-    return (b1, obj,  obj + rho * gamma_var.x + lamd * t.x, gini, time_used)
+    return (b1, obj,  obj + rho * gamma_var.x + lamd * t.x, gini, time_used, gamma_var.x)
 
 
 def optimization(t0_init, relaxed_list, max_iter, frac, ans, b0_init, b0, score, epsilon1, epsilon2, rho, lamd, alpha, tol, cnt = 0, obj = 0, iter = 0):
@@ -400,12 +400,12 @@ def optimization(t0_init, relaxed_list, max_iter, frac, ans, b0_init, b0, score,
     ans["gini"].append(gini)
     # ans["con_trans"].append(con_trans)
     ans["time"].append(t1-t0)
-    
+    ans["gamma"].append(gamma_var.x)
 
     print(time_used)
     cur_time = time.time()
     if iter >= max_iter or cur_time - t0_init > 3600:
-        return (b1, obj, obj+gamma_var.x+lamd*t.x, gini, time_used, z_idx)
+        return (b1, obj, obj+gamma_var.x+lamd*t.x, gini, time_used, z_idx, gamma_var.x)
     if abs(obj - obj_init) <= tol:
         b0 = b1
         epsilon1 = epsilon1 * 2

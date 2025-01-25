@@ -257,7 +257,7 @@ def optimization_global(b0_init, b0, score, rho, lamd, alpha, time_limit,count):
                     (gp.quicksum(score_pair[x_idx1][x_idx2][j_idx1][j_idx2] * eta[x_idx1, x_idx2, j_idx1, j_idx2].x for x_idx1 in range(x_card) for x_idx2 in range(x_card) for j_idx1 in range(K) for j_idx2 in range(K)) ) / (N**2)
                     ).getValue() / ((gp.quicksum(z[x_idx, j_idx].x * score_unit[x_idx, j_idx] for x_idx in range(x_card) for j_idx in range(K))) / N).getValue()
     print(con_trans)
-    gini = con_trans - gamma_var.x
+    gini = con_trans 
     print(gini)
     
     # check the number of non-distinguishable 
@@ -288,7 +288,7 @@ def optimization_global(b0_init, b0, score, rho, lamd, alpha, time_limit,count):
     t1 = time.time()
     time_used = t1 - t0 
     print(time_used)
-    return (b1, obj,  obj + rho * gamma_var.x + lamd * t.x, gini, time_used)
+    return (b1, obj,  obj + rho * gamma_var.x + lamd * t.x, gini, time_used, gamma_var.x)
         
 def optimization_linear(b0_init, score, rho, lamd, alpha):
     t0 = time.time()
@@ -524,15 +524,15 @@ def optimization(t0_init, relaxed_list, max_iter, frac, ans, b0_init, b0, score,
     ans["obj_init"].append(obj_init)
     ans["obj"].append(obj)
     ans["welfare"].append(obj + gamma_var.x * rho + lamd * t.x)
-    gini = con_trans - gamma_var.x
+    gini = con_trans 
     ans["gini"].append(gini)
     ans["time"].append(t1-t0)
-    
+    ans["gamma"].append(gamma_var.x)
     print(gini)
     print(time_used)
     cur_time = time.time()
     if iter >= max_iter or cur_time - t0_init > 3600:
-        return (b1, obj, obj+gamma_var.x+lamd*t.x, gini, time_used, z_idx)
+        return (b1, obj, obj+gamma_var.x+lamd*t.x, gini, time_used, z_idx, gamma_var.x)
     if abs(obj - obj_init) <= tol:
         b0 = b1
         epsilon1 = epsilon1 * 2
